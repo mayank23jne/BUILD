@@ -1,0 +1,23 @@
+<div class="container">
+<label class="bold">Mid Monitoring :
+</label><label class="switch"><input type="checkbox" (change)="check($event)" checked="" id="togBtn"><div class="slider round"><!--ADDED HTML --><span class="on">ON</span><span class="off">OFF</span><!--END--></div></label> <br>
+<label class="bold">Connected Midi Inputs :</label>
+<hr>
+<div *ngFor="let x of midiService.model.inputs"><label>{{ x }}</label></div>
+<hr>
+<label>Latest MIDI Message received</label>
+<div class="row">
+<div class="col-md-3">
+	<label>Channel : {{midiService.model.channel }}</label>
+</div>
+<div class="col-md-3">
+	<label>Type : {{ midiService.model.cc }}</label>
+</div>
+<div class="col-md-3">
+	<label>Value : {{ midiService.model.value }}</label>
+</div>
+<div class="col-md-3">
+	<label>Velocity : {{ midiService.model.velocity }}</label>
+</div>
+</div>
+</div>

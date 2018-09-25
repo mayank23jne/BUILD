@@ -1,6 +1,17 @@
-before_install:
-  - npm install -g npm@2.11.3
 language: node_js
 node_js:
-  - "0.12.7"
-script: cd BUILD && npm install grunt-cli && npm install && grunt dist
+  - 8
+sudo: required
+addons:
+    chrome: stable
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+install:
+  - npm set progress=false
+  - npm install
+script:
+  - ng lint
+  - npm run test
+  - npm run e2e
+  - npm run build

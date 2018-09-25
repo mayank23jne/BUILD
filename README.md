@@ -1,130 +1,104 @@
+[![Angular Logo](./logo-angular.jpg)](https://angular.io/) [![Electron Logo](./logo-electron.jpg)](https://electron.atom.io/)
 
-![](https://img.shields.io/badge/STATUS-NOT%20CURRENTLY%20MAINTAINED-red.svg?longCache=true&style=flat)
+[![Travis Build Status][build-badge]][build]
+[![Dependencies Status][dependencyci-badge]][dependencyci]
+[![Make a pull request][prs-badge]][prs]
+[![License](http://img.shields.io/badge/Licence-MIT-brightgreen.svg)](LICENSE.md)
 
-# Important Notice
-We have decided to stop the maintenance of the open source version of Build.
-Build is still available and sold as a cloud product from SAP, with regular updates and new features. It’s available at www.build.me.
-Its open source version and all the files in this public GitHub repository will no longer be maintained.
+[![Watch on GitHub][github-watch-badge]][github-watch]
+[![Star on GitHub][github-star-badge]][github-star]
+[![Tweet][twitter-badge]][twitter]
 
+# Introduction
 
+Bootstrap and package your project with Angular 6(+) and Electron (Typescript + SASS + Hot Reload) for creating Desktop applications.
 
-<p align="center">
-<a href="https://www.youtube.com/watch?v=PQaZqxVtln4
-" target="_blank"><img src = "https://github.com/SAP/BUILD/blob/master/docs/images/BUILD_Logo_Light.png?raw=true" /></a>
-<br />
-Beta - work in Progress
-</p>
+Currently runs with:
 
-# Overview of BUILD
-BUILD  is an open-source, cloud-based, and social platform that enables users with no UI development knowledge to create fully interactive prototypes. Without writing a line of code, you can perform user research, design the UI, include realistic data, and share the prototypes with colleagues. Developers can use the code of the prototype as a jumpstart to quickly create the app.
+- Angular v6.1.2
+- Electron v2.0.7
+- Electron Builder v20.28.1
 
-<p align="center">
-<a href="https://www.youtube.com/watch?v=PQaZqxVtln4
-" target="_blank"><img src="https://github.com/SAP/BUILD/blob/data-model-samples/docs/images/image_youtube_email.png?raw=true" 
-alt="To view the BUILD getting started click on the image..." width="640" height="360"/></a>
-</p>
+With this sample, you can :
 
-For a more detailed description of BUILD, see the [BUILD Overview](https://github.com/SAP/BUILD/wiki/BUILD-Overview).
+- Run your app in a local development environment with Electron & Hot reload
+- Run your app in a production environment
+- Package your app into an executable file for Linux, Windows & Mac
 
-# BUILD Web Site
-Check the the [BUILD Web Site](http://www.build.me/)! 
+## Getting Started
 
+Clone this repository locally :
 
-# Getting Started 
+``` bash
+git clone https://github.com/maximegris/angular-electron.git
+```
 
-## Try BUILD in Docker
-1. Install Docker Engine and Docker Compose [https://docs.docker.com/](https://docs.docker.com/)
-2. Create file docker-compose.yml 
-    ```sh 
-    web:
-      image: sapbuild/build:0.3.3
-      ports:
-        - "9000:9000"
-      links:
-        - mongo
-    
-    mongo:
-      image: mongo:2.6.11
-      volumes:
-        - ./db:/data/db
-    ```
-    
-3. Pull and start containers
+Install dependencies with npm :
 
-   ```sh
-   docker-compose up
-    ```
-    
-4. Go to docker host [http://localhost:9000](http://localhost:9000) or using docker_host IP address
+``` bash
+npm install
+```
 
-   ```sh
-   docker-machine ip default
-    ```
+There is an issue with `yarn` and `node_modules` that are only used in electron on the backend when the application is built by the packager. Please use `npm` as dependencies manager.
 
 
-## Install locally 
-Quick guide - see [HERE](./docs/DEVELOPER_README.md)
+If you want to generate Angular components with Angular-cli , you **MUST** install `@angular/cli` in npm global context.  
+Please follow [Angular-cli documentation](https://github.com/angular/angular-cli) if you had installed a previous version of `angular-cli`.
 
-### Prerequisites
+``` bash
+npm install -g @angular/cli
+```
 
-Install  | Version
-------------- | -------------
-[node.js](https://docs.npmjs.com/cli/install) | _*Versions 10.33 and 10.38 are supported with npm 1.4.28*_
-[mongodb](https://www.mongodb.org/downloads#previous)  | _*Only version 2.6.x is supported*_
+## To build for development
 
-### Procedure
+- **in a terminal window** -> npm start  
 
-1. Install :
-    ```sh 
-    sudo npm install -g sap-build-cli@0.3.3
-    ```
+Voila! You can use your Angular + Electron app in a local development environment with hot reload !
 
-4. Start the BUILD application:
-    ```sh
-     sudo sapbuild
-    ```
-### Result
+The application code is managed by `main.ts`. In this sample, the app runs with a simple Angular App (http://localhost:4200) and an Electron window.  
+The Angular component contains an example of Electron and NodeJS native lib import.  
+You can desactivate "Developer Tools" by commenting `win.webContents.openDevTools();` in `main.ts`.
 
-To run, enter [http://localhost:9000](http://localhost:9000) in your Chrome browser, and select **Join**.
+## Included Commands
 
+|Command|Description|
+|--|--|
+|`npm run ng:serve:web`| Execute the app in the browser |
+|`npm run build`| Build the app. Your built files are in the /dist folder. |
+|`npm run build:prod`| Build the app with Angular aot. Your built files are in the /dist folder. |
+|`npm run electron:local`| Builds your application and start electron
+|`npm run electron:linux`| Builds your application and creates an app consumable on linux system |
+|`npm run electron:windows`| On a Windows OS, builds your application and creates an app consumable in windows 32/64 bit systems |
+|`npm run electron:mac`|  On a MAC OS, builds your application and generates a `.app` file of your application that can be run on Mac |
 
-# User Documentation
-Check out the [BUILD Support Site](http://sap.github.io/BUILD_User_Assistance) for detailed help topics and video tutorials about using BUILD!
+**Your application is optimised. Only /dist folder and node dependencies are included in the executable.**
 
-# What's New in BUILD 0.3?
-The BUILD OS community have been busy of the last couple of months and are excited to share our latest updates to BUILD.
-Our customers have been waiting for a long time, and here it is: the first version of the BUILD UI Composer! 
+## You want to use a specific lib (like rxjs) in electron main thread ?
 
-Along with the UI composer comes:
-+ Drag-and-drop of UI controls into the prototype canvas.
-+ Data modeling, sample data management, and data binding.
-+ Smart templates that make UI design quick and easy.
-+ A ton of bug fixes and technical improvements.
+You can to this! Just by importing your library in npm dependencies (not devDependencies) with `npm install --save`. It will be loaded by electron during build phase and added to the final package. Then use your library by importing it in `main.ts` file. Easy no ?
 
-# Contact
+## Browser mode
 
-_Having a problem? Create a bug or ask a question using the [BUILD Issue Tracker](https://github.com/SAP/BUILD/issues), send a mail to contribute.build@sap.com or send a tweet to our twitter account [buildwithbuild](https://twitter.com/buildwithbuild) and we'll get back to you as soon as possible._ 
+Maybe you want to execute the application in the browser with hot reload ? You can do it with `npm run ng:serve:web`.  
+Note that you can't use Electron or NodeJS native libraries in this case. Please check `providers/electron.service.ts` to watch how conditional import of electron/Native libraries is done.
 
-# Make a Contribution
+## Branch & Packages version
 
-So you want to contribute to BUILD? Good choice! There is lots of scope for contribution, and there's plenty to do! 
-Popular contributions include bug reports, feature requests, and new features. [This document](https://github.com/SAP/BUILD/blob/master/Contributing.md) describes how to make contributions to BUILD.
+- Angular 4 & Electron 1 : Branch [angular4](https://github.com/maximegris/angular-electron/tree/angular4)
+- Angular 5 & Electron 1 : Branch [angular5](https://github.com/maximegris/angular-electron/tree/angular5)
+- Angular 6 & Electron 2 : (master)
 
-# Licenses
-
-This project is licensed under the Apache Software License, v. 2 except as noted otherwise in the [License file](https://github.com/SAP/BUILD/blob/master/LICENSE.txt).
-
-_Please do not remove this license from cloned or forked versions of BUILD._
-
-### Licenses for Contributors
-
-+ [Individual Contribution License Agreement](https://github.com/SAP/BUILD/blob/master/docs/SAP%20License%20Agreements/SAP%2BIndividual%2BContributor%2BLicense%2BAgreement.pdf) 
-+ [Corporate Contributor License Agreement](https://github.com/SAP/BUILD/blob/master/docs/SAP%20License%20Agreements/SAP%2BCorporate%2BContributor%2BLicense%2BAgreement.pdf) 
-
-# Legal Notices
-
-[View the legal notice about fonts used in Build](https://github.com/SAP/BUILD/wiki/Legal-Notice-About-Fonts).
-
-# In Memoriam Notice
-
-The BUILD community wishes to dedicate BUILD to the memory of our recently deceased colleague and friend Luan O’Carroll. Luan was a technology innovator and a great promoter of the open source philosophy. He was highly respected for his expertise, passion, curiosity, and his ability to push the boundaries. He is sadly missed.
+[build-badge]: https://travis-ci.org/maximegris/angular-electron.svg?branch=master
+[build]: https://travis-ci.org/maximegris/angular-electron.svg?branch=master
+[dependencyci-badge]: https://dependencyci.com/github/maximegris/angular-electron/badge
+[dependencyci]: https://dependencyci.com/github/maximegris/angular-electron
+[license-badge]: https://img.shields.io/badge/license-Apache2-blue.svg?style=flat
+[license]: https://github.com/maximegris/angular-electron/blob/master/LICENSE.md
+[prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[prs]: http://makeapullrequest.com
+[github-watch-badge]: https://img.shields.io/github/watchers/maximegris/angular-electron.svg?style=social
+[github-watch]: https://github.com/maximegris/angular-electron/watchers
+[github-star-badge]: https://img.shields.io/github/stars/maximegris/angular-electron.svg?style=social
+[github-star]: https://github.com/maximegris/angular-electron/stargazers
+[twitter]: https://twitter.com/intent/tweet?text=Check%20out%20angular-electron!%20https://github.com/maximegris/angular-electron%20%F0%9F%91%8D
+[twitter-badge]: https://img.shields.io/twitter/url/https/github.com/maximegris/angular-electron.svg?style=social
